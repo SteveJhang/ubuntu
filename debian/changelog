@@ -1,8 +1,14 @@
-network-manager-l2tp (0.2.1-0ubuntu1) lucid; urgency=low
+network-manager-l2tp (0.2.2-0maverick2) maverick; urgency=low
 
-  * Backport to lucid.
+  * build dep fix
 
- -- Sergey Prokhorov <root@seriyps.ru>  Thu, 09 Feb 2012 02:19:10 +0000
+ -- Sergey Prokhorov <root@seriyps.ru>  Fri, 24 Feb 2012 06:51:14 +0400
+
+network-manager-l2tp (0.2.2-0maverick1) maverick; urgency=low
+
+  * Backported to maverick
+
+ -- Sergey Prokhorov <root@seriyps.ru>  Fri, 24 Feb 2012 05:27:54 +0400
 
 network-manager-l2tp (0.2) oneiric; urgency=low
 
