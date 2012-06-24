@@ -21,16 +21,6 @@ case "$1" in
     if [ -x "/etc/init.d/dbus" ]; then
       invoke-rc.d dbus force-reload || true
     fi
-    # # Ask NM to detect plugin
-    # if [ -x "/etc/init.d/network-manager" ]; then
-    #   service network-manager restart || true
-    # fi
-	# # Possibky fix
-	# # "xl2tpd[pid]: open_controlfd: Unable to open /var/run/xl2tpd/l2tp-control for reading."
-    # if [ -d "/var/run/xl2tpd" ]; then
-    #   mkdir -p "/var/run/xl2tpd"
-    # fi
-	
   ;;
   abort-upgrade|abort-remove|abort-deconfigure)
   ;;
