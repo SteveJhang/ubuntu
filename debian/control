@@ -17,7 +17,7 @@ Build-Depends:
  libgtk-3-dev (>= 3.0),
  libgconf2-dev,
  libglib2.0-dev
-Standards-Version: 3.9.3
+Standards-Version: 3.9.2
 Vcs-Git: https://github.com/seriyps/NetworkManager-l2tp.git
 Vcs-Browser: https://github.com/seriyps/NetworkManager-l2tp
 Homepage: https://github.com/seriyps/NetworkManager-l2tp

@@ -1,18 +1,18 @@
-network-manager-l2tp (0.9.4-0oneiric1) oneiric; urgency=low
+network-manager-l2tp (0.9.4-0precise1) precise; urgency=low
 
   * Synchronize code with pptp plugin and adjust version numbers
   * Fix many warnings
   * Add support for auth-dialog's external-ui mode
 
- -- Sergey Prokhorov <root@seriyps.ru>  Mon, 25 Jun 2012 00:09:23 +0400
+ -- Sergey Prokhorov <root@seriyps.ru>  Mon, 25 Jun 2012 00:13:23 +0400
 
-network-manager-l2tp (0.3.3-0oneiric1) oneiric; urgency=low
+network-manager-l2tp (0.3.3-0precise1) precise; urgency=low
 
   * More verbose debug output
   * Fixed issue with routes to multi-IP gateway
   * Disable aggrmode for ipsec
 
- -- Sergey Prokhorov <root@seriyps.ru>  Wed, 09 May 2012 01:08:45 +0400
+ -- Sergey Prokhorov <root@seriyps.ru>  Wed, 09 May 2012 00:52:50 +0400
 
 network-manager-l2tp (0.3.2-0oneiric1) oneiric; urgency=low
 

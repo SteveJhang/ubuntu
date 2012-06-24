@@ -9,7 +9,7 @@ override_dh_auto_configure:
 		--disable-static \
 		--with-pppd-plugin-dir=/usr/lib/pppd/2.4.5 \
 		--with-gtkver=3 \
-		--with-dist-version=0.9.4-0oneiric1
+		--with-dist-version=0.9.4-0precise1
 
 override_dh_makeshlibs:
 	dh_makeshlibs -X/usr/lib/NetworkManager/ -X/usr/lib/pppd/
