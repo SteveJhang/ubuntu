@@ -38,6 +38,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <ctype.h>
+#include <locale.h>
 
 #include <errno.h>
 #include <sys/socket.h>
@@ -75,7 +76,7 @@ static gboolean debug = FALSE;
 #define NM_L2TP_PPP_SERVICE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), NM_TYPE_L2TP_PPP_SERVICE, NML2tpPppService))
 #define NM_L2TP_PPP_SERVICE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), NM_TYPE_L2TP_PPP_SERVICE, NML2tpPppServiceClass))
 #define NM_IS_L2TP_PPP_SERVICE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), NM_TYPE_L2TP_PPP_SERVICE))
-#define NM_IS_L2TP_PPP_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), NM_TYPE_L2TP_PPP_SERVICE))
+#define NM_IS_L2TP_PPP_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), NM_TYPE_L2TP_PPP_SERVICE))
 #define NM_L2TP_PPP_SERVICE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), NM_TYPE_L2TP_PPP_SERVICE, NML2tpPppServiceClass))
 
 typedef struct {
@@ -902,7 +903,7 @@ nm_l2tp_start_ipsec(NML2tpPlugin *plugin,
 	"PATH=/usr/local/sbin:/usr/sbin:/sbin; export PATH;"
 	"[ \"x$defaultrouteaddr\" = \"x\" ] && ipsec setup restart");
 
-	sys += system("PATH=/usr/local/sbin:/usr/sbin:/sbin ipsec "
+	sys += system("PATH=/usr/local/sbin:/usr/sbin:/sbin ipsec whack"
 			" --listen");
 	sprintf(cmd1,". /var/run/pluto/ipsec.info;"
 	"PATH=/usr/local/sbin:/usr/sbin:/sbin ipsec addconn "
@@ -1634,11 +1635,20 @@ main (int argc, char *argv[])
 		{NULL}
 	};
 
+#if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
+#endif
+
+	/* locale will be set according to environment LC_* variables */
+	setlocale (LC_ALL, "");
+
+	bindtextdomain (GETTEXT_PACKAGE, NM_L2TP_LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
 
 	/* Parse options */
-	opt_ctx = g_option_context_new ("");
-	g_option_context_set_translation_domain (opt_ctx, "UTF-8");
+	opt_ctx = g_option_context_new (NULL);
+	g_option_context_set_translation_domain (opt_ctx, GETTEXT_PACKAGE);
 	g_option_context_set_ignore_unknown_options (opt_ctx, FALSE);
 	g_option_context_set_help_enabled (opt_ctx, TRUE);
 	g_option_context_add_main_entries (opt_ctx, options, NULL);
