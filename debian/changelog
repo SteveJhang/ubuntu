@@ -1,11 +1,11 @@
-network-manager-l2tp (0.9.8-0quantal1) quantal; urgency=low
+network-manager-l2tp (0.9.8-0raring1) raring; urgency=low
 
   * Builds against the GNOME 3.8 versions of GLib and Gtk+
   * Fix undefuned NM_L2TP_LOCALEDIR
   * License file added
   * Minor localization fixes
 
- -- Sergey Prokhorov <root@seriyps.ru>  Sun, 31 Mar 2013 20:12:30 +0400
+ -- Sergey Prokhorov <root@seriyps.ru>  Thu, 09 May 2013 19:02:12 +0400
 
 network-manager-l2tp (0.9.6-0quantal1) quantal; urgency=low
 
