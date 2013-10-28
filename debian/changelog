@@ -1,3 +1,18 @@
+network-manager-l2tp (0.9.8.5-0saucy1) saucy; urgency=low
+
+  * Bugfix: typo in nm-l2tp-service.name
+
+ -- Sergey Prokhorov <root@seriyps.ru>  Mon, 28 Oct 2013 05:21:33 +0400
+
+network-manager-l2tp (0.9.8.4-0saucy1) saucy; urgency=low
+
+  * Fix IPSec startup commands
+  * noccp pppd option added
+  * minor locales fixes
+  * require new versions of gtk+ and glib
+
+ -- Sergey Prokhorov <root@seriyps.ru>  Sat, 26 Oct 2013 23:21:52 +0400
+
 network-manager-l2tp (0.9.8-0raring1) raring; urgency=low
 
   * Builds against the GNOME 3.8 versions of GLib and Gtk+

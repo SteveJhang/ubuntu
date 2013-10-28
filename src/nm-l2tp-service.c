@@ -899,13 +899,13 @@ nm_l2tp_start_ipsec(NML2tpPlugin *plugin,
 	}
 	sprintf(session_name, "nm-ipsec-l2tpd-%d", getpid());
 
-	sys += system(". /var/run/pluto/ipsec.info;"
+	sys += system("test -e /var/run/pluto/ipsec.info && . /var/run/pluto/ipsec.info;"
 	"PATH=/usr/local/sbin:/usr/sbin:/sbin; export PATH;"
 	"[ \"x$defaultrouteaddr\" = \"x\" ] && ipsec setup restart");
 
 	sys += system("PATH=/usr/local/sbin:/usr/sbin:/sbin ipsec whack"
 			" --listen");
-	sprintf(cmd1,". /var/run/pluto/ipsec.info;"
+	sprintf(cmd1,"test -e /var/run/pluto/ipsec.info && . /var/run/pluto/ipsec.info;"
 	"PATH=/usr/local/sbin:/usr/sbin:/sbin ipsec addconn "
 		" ${defaultrouteaddr:+--defaultroute} $defaultrouteaddr"
 		" ${defaultroutenexthop:+--defaultroutenexthop} $defaultroutenexthop"
@@ -1245,6 +1245,10 @@ nm_l2tp_config_write (NML2tpPlugin *plugin,
 
 	/* Don't need to auth the L2TP server */
 	write_config_option (pppopt_fd, "noauth\n");
+
+	/* pppd and xl2tpd on Linux require this option to support Android and iOS clients,
+	   and pppd on Linux clients won't work without the same option */
+	write_config_option (pppopt_fd, "noccp\n");
 
 	if (service_priv && strlen (service_priv->username)) {
 		write_config_option (pppopt_fd, "name %s\n", service_priv->username);
