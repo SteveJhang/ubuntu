@@ -1,8 +1,8 @@
-network-manager-l2tp (0.9.8.5-0trusty1) trusty; urgency=medium
+network-manager-l2tp (0.9.8.5-0utopic1) utopic; urgency=medium
 
   * Fixed typo in nm-l2tp-service.name
 
- -- Sergey Prokhorov <root@seriyps.ru>  Thu, 01 May 2014 21:21:07 +0400
+ -- Sergey Prokhorov <root@seriyps.ru>  Tue, 28 Oct 2014 00:11:04 +0300
 
 network-manager-l2tp (0.9.8.4-0saucy1) saucy; urgency=low
 
