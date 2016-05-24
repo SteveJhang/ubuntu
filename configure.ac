@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
 
-AC_INIT(NetworkManager-l2tp, 0.9.8.0, root@seriyps.ru, NetworkManager-l2tp)
+AC_INIT(NetworkManager-l2tp, 0.9.8.5, root@seriyps.ru, NetworkManager-l2tp)
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2 subdir-objects])
 AM_MAINTAINER_MODE
 
@@ -61,42 +61,28 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
 IT_PROG_INTLTOOL([0.35])
 AM_GLIB_GNU_GETTEXT
 
-PKG_CHECK_MODULES(GTHREAD, gthread-2.0)
-AC_SUBST(GTHREAD_CFLAGS)
-AC_SUBST(GTHREAD_LIBS)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.32)
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
+GLIB_CFLAGS="$GLIB_CFLAGS -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32"
 
 PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.74)
 AC_SUBST(DBUS_GLIB_CFLAGS)
 AC_SUBST(DBUS_GLIB_LIBS)
 
 PKG_CHECK_MODULES(NM,
-                  NetworkManager >= 0.9.6
-                  libnm-util >= 0.9.6
-                  libnm-glib >= 0.9.6
-                  libnm-glib-vpn >= 0.9.6)
+                  NetworkManager >= 0.9.8
+                  libnm-util >= 0.9.8
+                  libnm-glib >= 0.9.8
+                  libnm-glib-vpn >= 0.9.8)
 AC_SUBST(NM_CFLAGS)
 AC_SUBST(NM_LIBS)
 
 if test x"$with_gnome" != xno; then
-	AC_ARG_WITH([gtkver], AS_HELP_STRING([--with-gtkver], [The major version of GTK+ to build with]),
-	            with_gtkver="$withval",with_gtkver=0)
-
-	gtk2_req=2.20
-	gtk3_req=2.91.4
-	case "${with_gtkver}" in
-	       0) PKG_CHECK_MODULES(GTK, gtk+-3.0 > $gtk3_req, ,
-	                            [PKG_CHECK_MODULES(GTK, gtk+-2.0 > $gtk2_req)])
-		  ;;
-	       2) PKG_CHECK_MODULES(GTK, gtk+-2.0 >= $gtk2_req)
-	          ;;
-	       3) PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $gtk3_req)
-	          ;;
-	       *) AC_MSG_ERROR(unknown GTK+ version $with_gtkver!)
-	          ;;
-	esac
-	GTK_CFLAGS="$GTK_CFLAGS -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_0"
+	PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.4)
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
+	GTK_CFLAGS="$GTK_CFLAGS -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_4"
 
 	PKG_CHECK_MODULES(GNOMEKEYRING, gnome-keyring-1)
 	AC_SUBST(GNOMEKEYRING_CFLAGS)
