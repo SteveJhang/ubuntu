@@ -20,27 +20,11 @@
  *
  **************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <string.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-
-#include <glib.h>
-#include <glib/gi18n-lib.h>
-
-#include <nm-connection.h>
-#include <nm-setting-vpn.h>
+#include "nm-default.h"
 
 #include "advanced-dialog.h"
-#include "nm-l2tp.h"
-#include "../src/nm-l2tp-service.h"
+
+#include <errno.h>
 
 #define COL_NAME  0
 #define COL_VALUE 1
@@ -70,6 +54,8 @@ static const char *advanced_keys[] = {
 	NM_L2TP_KEY_NO_ACCOMP,
 	NM_L2TP_KEY_LCP_ECHO_FAILURE,
 	NM_L2TP_KEY_LCP_ECHO_INTERVAL,
+	NM_L2TP_KEY_MTU,
+	NM_L2TP_KEY_MRU,
 	NULL
 };
 
@@ -91,11 +77,11 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
                                           GError **error)
 {
 	GHashTable *hash;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	nm_setting_vpn_foreach_data_item (s_vpn, copy_values, hash);
 	return hash;
 }
@@ -282,7 +268,7 @@ auth_methods_setup (GtkBuilder *builder, GHashTable *hash)
 	value = g_hash_table_lookup (hash, NM_L2TP_KEY_REQUIRE_MPPE);
 	if (value && !strcmp (value, "yes"))
 		use_mppe = TRUE;
-	
+
 	/* Or MPPE-128 */
 	value = g_hash_table_lookup (hash, NM_L2TP_KEY_REQUIRE_MPPE_128);
 	if (value && !strcmp (value, "yes"))
@@ -497,6 +483,38 @@ advanced_dialog_new (GHashTable *hash)
 	handle_mppe_changed (widget, TRUE, builder);
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (mppe_toggled_cb), builder);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder,"ppp_mtu_spinbutton"));
+	value = g_hash_table_lookup (hash, NM_L2TP_KEY_MTU);
+	if (value && *value) {
+		long int tmp_int;
+
+		errno = 0;
+		tmp_int = strtol (value, NULL, 10);
+		if (errno == 0 && tmp_int >= 575 && tmp_int <= 1500) {
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp_int);
+		}
+	} else {
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1400);
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder,"ppp_use_mppe"));
+	handle_mppe_changed (widget, TRUE, builder);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (mppe_toggled_cb), builder);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder,"ppp_mru_spinbutton"));
+	value = g_hash_table_lookup (hash, NM_L2TP_KEY_MRU);
+	if (value && *value) {
+		long int tmp_int;
+
+		errno = 0;
+		tmp_int = strtol (value, NULL, 10);
+		if (errno == 0 && tmp_int >= 575 && tmp_int <= 1500) {
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp_int);
+		}
+	} else {
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1400);
+	}
+
 out:
 	g_free (ui_file);
 	return dialog;
@@ -511,6 +529,8 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gboolean valid;
+	int mtu_num;
+	int mru_num;
 
 	g_return_val_if_fail (dialog != NULL, NULL);
 	if (error)
@@ -603,6 +623,16 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 
 		valid = gtk_tree_model_iter_next (model, &iter);
 	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ppp_mtu_spinbutton"));
+	mtu_num = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+	g_hash_table_insert (hash, g_strdup (NM_L2TP_KEY_MTU),
+	                     g_strdup_printf ("%d", mtu_num));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ppp_mru_spinbutton"));
+	mru_num = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+	g_hash_table_insert (hash, g_strdup (NM_L2TP_KEY_MRU),
+	                     g_strdup_printf ("%d", mru_num));
 
 	return hash;
 }

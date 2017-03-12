@@ -34,18 +34,27 @@
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 
+#ifdef NM_VPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-connection.h>
 #include <nm-setting-vpn.h>
 
+#else /* !NM_VPN_OLD */
+
+#include <NetworkManager.h>
+#endif
+
 #include "ipsec-dialog.h"
-#include "nm-l2tp.h"
-#include "../src/nm-l2tp-service.h"
+#include "nm-default.h"
+#include "nm-l2tp-editor.h"
+#include "nm-service-defines.h"
 
 static const char *ipsec_keys[] = {
 	NM_L2TP_KEY_IPSEC_ENABLE,
 	NM_L2TP_KEY_IPSEC_GROUP_NAME,
 	NM_L2TP_KEY_IPSEC_GATEWAY_ID,
 	NM_L2TP_KEY_IPSEC_PSK,
+	NM_L2TP_KEY_IPSEC_FORCEENCAPS,
 	NULL
 };
 
@@ -67,11 +76,11 @@ ipsec_dialog_new_hash_from_connection (NMConnection *connection,
                                           GError **error)
 {
 	GHashTable *hash;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	nm_setting_vpn_foreach_data_item (s_vpn, copy_values, hash);
 	return hash;
 }
@@ -84,13 +93,25 @@ handle_enable_changed (GtkWidget *check, gboolean is_init, GtkBuilder *builder)
 
 	enabledp = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_psk"));
+	gtk_widget_set_sensitive (widget, enabledp);
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_psk"));
+	gtk_widget_set_sensitive (widget, enabledp);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_gateway_id"));
 	gtk_widget_set_sensitive (widget, enabledp);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_gateway_id"));
 	gtk_widget_set_sensitive (widget, enabledp);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_group_name"));
+	gtk_widget_set_sensitive (widget, enabledp);
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_group_name"));
+	gtk_widget_set_sensitive (widget, enabledp);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "forceencaps_enable"));
 	gtk_widget_set_sensitive (widget, enabledp);
 }
 
@@ -141,10 +162,15 @@ ipsec_dialog_new (GHashTable *hash)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
+	value = g_hash_table_lookup (hash, NM_L2TP_KEY_IPSEC_FORCEENCAPS);
+	if (value && !strcmp (value, "yes")) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "forceencaps_enable"));
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	}
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_group_name"));
-	value = g_hash_table_lookup (hash, NM_L2TP_KEY_IPSEC_GROUP_NAME);
-	if (!value) value="GroupVPN";
-	gtk_entry_set_text(GTK_ENTRY(widget), value);
+	if((value = g_hash_table_lookup (hash, NM_L2TP_KEY_IPSEC_GROUP_NAME)))
+		gtk_entry_set_text(GTK_ENTRY(widget), value);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_gateway_id"));
 	if((value = g_hash_table_lookup (hash, NM_L2TP_KEY_IPSEC_GATEWAY_ID)))
@@ -183,6 +209,10 @@ ipsec_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_enable"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert(hash, g_strdup(NM_L2TP_KEY_IPSEC_ENABLE), g_strdup("yes"));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "forceencaps_enable"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert(hash, g_strdup(NM_L2TP_KEY_IPSEC_FORCEENCAPS), g_strdup("yes"));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ipsec_gateway_id"));
 	g_hash_table_insert(hash, g_strdup(NM_L2TP_KEY_IPSEC_GATEWAY_ID),

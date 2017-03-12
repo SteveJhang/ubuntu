@@ -1,30 +1,36 @@
 Source: network-manager-l2tp
 Section: net
 Priority: optional
-Maintainer: Sergey Prokhorov <root@seriyps.ru>
-Build-Depends:
- debhelper (>= 8),
- dpkg-dev (>= 1.16.1),
- dh-autoreconf,
- network-manager-dev (>= 0.9.8),
- libnm-util-dev (>= 0.9.8),
- libnm-glib-dev (>= 0.9.8),
- libnm-glib-vpn-dev (>= 0.9.8),
- ppp-dev (>= 2.4.5),
- intltool,
- libdbus-glib-1-dev (>= 0.74),
- libgnome-keyring-dev,
- libgtk-3-dev (>= 3.0),
- libglib2.0-dev
-Standards-Version: 3.9.4
-Vcs-Git: https://github.com/seriyps/NetworkManager-l2tp.git
-Vcs-Browser: https://github.com/seriyps/NetworkManager-l2tp
-Homepage: https://github.com/seriyps/NetworkManager-l2tp
+Maintainer: Douglas Kosovic <doug@uq.edu.au>
+Build-Depends: debhelper (>= 9),
+               dh-autoreconf,
+               intltool,
+               network-manager-dev (>= 1.2.0),
+               libnm-util-dev (>= 1.2.0),
+               libnm-glib-dev (>= 1.2.0),
+               libnm-glib-vpn-dev (>= 1.2.0),
+               libnm-gtk-dev (>= 1.2.0),
+               libnm-dev (>= 1.2.0),
+               libnma-dev (>= 1.2.0),
+               ppp-dev (>= 2.4.7-1+1),
+               libdbus-glib-1-dev (>= 0.74),
+               libsecret-1-dev (>= 0.18),
+               libgtk-3-dev (>= 3.4),
+               libglib2.0-dev (>= 2.32)
+Standards-Version: 3.9.7
+Vcs-Git: https://github.com/nm-l2tp/debian.git
+Vcs-Browser: https://github.com/nm-l2tp/debian.git
+Homepage: https://github.com/nm-l2tp/network-manager-l2tp
 
 Package: network-manager-l2tp
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ppp (>= 2.4.5), ppp (<< 2.4.6), xl2tpd, openswan
-Recommends: network-manager-l2tp-gnome | plasma-widget-networkmanagement
+Architecture: linux-any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         network-manager (>= 1.2.0),
+         xl2tpd,
+         strongswan (>= 5.3.5-1ubuntu3.1)
+Breaks: network-manager-l2tp-gnome (<< 1.2.4)
+Replaces: network-manager-l2tp-gnome (<< 1.2.4)
 Description: network management framework (L2TP plugin core)
  NetworkManager is a system network service that manages your network devices
  and connections, attempting to keep active network connectivity when
@@ -32,11 +38,13 @@ Description: network management framework (L2TP plugin core)
  devices, and provides VPN integration with a variety of different VPN
  services.
  .
- This package provides a VPN plugin for L2TP with optional IPSec support.
+ This package provides a VPN plugin for L2TP with optional IPsec support.
 
 Package: network-manager-l2tp-gnome
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, network-manager-l2tp (= ${binary:Version})
+Architecture: linux-any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         network-manager-l2tp (= ${binary:Version})
 Description: network management framework (L2TP plugin GNOME GUI)
  NetworkManager is a system network service that manages your network devices
  and connections, attempting to keep active network connectivity when

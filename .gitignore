@@ -15,6 +15,8 @@ ltmain.sh
 missing
 mkinstalldirs
 POTFILES
+*.pot
+.dirstamp
 stamp-*
 .deps
 .libs
@@ -26,9 +28,14 @@ m4/gtk-doc.m4
 m4/intltool.m4
 m4/libtool.m4
 m4/lt*.m4
+appdata/network-manager-l2tp.metainfo.xml
+/cscope.*
 
 auth-dialog/nm-l2tp-auth-dialog
 nm-l2tp-service.name
 nm-l2tp.desktop
-src/nm-l2tp-pppd-service-glue.h
+src/nm-l2tp-pppd-service-dbus.c
+src/nm-l2tp-pppd-service-dbus.h
 src/nm-l2tp-service
+
+/NetworkManager-l2tp*.tar*

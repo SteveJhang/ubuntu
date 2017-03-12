@@ -1,3 +1,16 @@
+network-manager-l2tp (1.2.4-0ubuntu1~xenial1) xenial; urgency=medium
+
+  * New upstream release.
+  * Add Depends on strongswan (>= 5.3.5-1ubuntu3.1) to network-manager-l2tp.
+    This ensures we have a version that has the apparmor profile disconnected
+    paths fix for charon and stroke (#1587886)
+  * IPsec ID selectors patch from upstream for VPN servers behind a NAT
+  * patch to remove nm-l2tp.desktop.in which causes intltoolize related test
+    to fail. nm-l2tp.desktop.in has been removed in upstream Git repository
+  * Synchronize package with network-manager-pptp package
+
+ -- Douglas Kosovic <doug@uq.edu.au>  Sun, 12 Mar 2017 22:20:00 +1000
+
 network-manager-l2tp (0.9.8.5-0utopic1) utopic; urgency=medium
 
   * Fixed typo in nm-l2tp-service.name
@@ -6,7 +19,7 @@ network-manager-l2tp (0.9.8.5-0utopic1) utopic; urgency=medium
 
 network-manager-l2tp (0.9.8.4-0saucy1) saucy; urgency=low
 
-  * Fix IPSec startup commands
+  * Fix IPsec startup commands
   * noccp pppd option added
   * minor locales fixes
   * require new versions of gtk+ and glib
