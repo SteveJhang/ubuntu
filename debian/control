@@ -2,7 +2,7 @@ Source: network-manager-l2tp
 Section: net
 Priority: optional
 Maintainer: Douglas Kosovic <doug@uq.edu.au>
-Build-Depends: debhelper (>= 9),
+Build-Depends: debhelper (>= 10),
                dh-autoreconf,
                intltool,
                network-manager-dev (>= 1.2.0),
@@ -28,7 +28,7 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          network-manager (>= 1.2.0),
          xl2tpd,
-         strongswan (>= 5.3.5-1ubuntu4.1)
+         strongswan
 Breaks: network-manager-l2tp-gnome (<< 1.2.4)
 Replaces: network-manager-l2tp-gnome (<< 1.2.4)
 Description: network management framework (L2TP plugin core)

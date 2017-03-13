@@ -1,3 +1,9 @@
+network-manager-l2tp (1.2.4-0ubuntu1~zesty1) zesty; urgency=medium
+
+  * Bump debhelper compat level to 10.
+
+ -- Douglas Kosovic <doug@uq.edu.au>  Mon, 13 Mar 2017 22:20:00 +1000
+
 network-manager-l2tp (1.2.4-0ubuntu1~yakkety1) yakkety; urgency=medium
 
   * Set Depends on strongswan (>= 5.3.5-1ubuntu4.1) to network-manager-l2tp.
