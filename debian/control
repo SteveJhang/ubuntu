@@ -17,7 +17,7 @@ Build-Depends: debhelper (>= 9),
                libsecret-1-dev (>= 0.18),
                libgtk-3-dev (>= 3.4),
                libglib2.0-dev (>= 2.32)
-Standards-Version: 3.9.7
+Standards-Version: 3.9.8
 Vcs-Git: https://github.com/nm-l2tp/debian.git
 Vcs-Browser: https://github.com/nm-l2tp/debian.git
 Homepage: https://github.com/nm-l2tp/network-manager-l2tp
@@ -28,7 +28,7 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          network-manager (>= 1.2.0),
          xl2tpd,
-         strongswan (>= 5.3.5-1ubuntu3.1)
+         strongswan (>= 5.3.5-1ubuntu4.1)
 Breaks: network-manager-l2tp-gnome (<< 1.2.4)
 Replaces: network-manager-l2tp-gnome (<< 1.2.4)
 Description: network management framework (L2TP plugin core)
