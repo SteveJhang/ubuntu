@@ -1,10 +1,16 @@
-network-manager-l2tp (1.2.4-0ubuntu2~yakkety1) yakkety; urgency=medium
+network-manager-l2tp (1.2.4-0ubuntu2~zesty1) zesty; urgency=medium
 
- * Patch to not use "leftprotoport=udp/l2tp" in generated ipsec config file
+  * Patch to not use "leftprotoport=udp/l2tp" in generated ipsec config file
     if port 1701 is not free. Ensures L2TP packets are encapsulated with IPsec
     if IPsec is enabled.
 
- -- Douglas Kosovic <doug@uq.edu.au>  Mon, 1 May 2017 16:15:00 +1000
+ -- Douglas Kosovic <doug@uq.edu.au>  Mon, 1 May 2017 17:00:00 +1000
+
+network-manager-l2tp (1.2.4-0ubuntu1~zesty1) zesty; urgency=medium
+
+  * Bump debhelper compat level to 10.
+
+ -- Douglas Kosovic <doug@uq.edu.au>  Mon, 13 Mar 2017 22:20:00 +1000
 
 network-manager-l2tp (1.2.4-0ubuntu1~yakkety1) yakkety; urgency=medium
 
