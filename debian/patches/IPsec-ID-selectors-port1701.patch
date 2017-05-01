@@ -1,15 +1,23 @@
 --- a/src/nm-l2tp-service.c
 +++ b/src/nm-l2tp-service.c
-@@ -676,7 +676,7 @@
- 	write_config_option (ipsec_fd, 		"  auto=add\n"
- 						"  type=transport\n");
+@@ -678,9 +678,13 @@
  
--	write_config_option (ipsec_fd, 		"  authby=secret\n"
-+	write_config_option (ipsec_fd,	"  authby=secret\n"
+ 	write_config_option (ipsec_fd, 		"  authby=secret\n"
  						"  keyingtries=0\n"
- 						"  left=%%defaultroute\n"
- 						"  leftprotoport=udp/l2tp\n"
-@@ -707,6 +707,8 @@
+-						"  left=%%defaultroute\n"
+-						"  leftprotoport=udp/l2tp\n"
+-						"  rightprotoport=udp/l2tp\n");
++						"  left=%%defaultroute\n");
++
++	if (is_port_free (1701)) {
++		write_config_option (ipsec_fd, "  leftprotoport=udp/l2tp\n");
++	}
++	write_config_option (ipsec_fd, "  rightprotoport=udp/l2tp\n");
++
+ 	value = nm_setting_vpn_get_data_item (s_vpn, NM_L2TP_KEY_IPSEC_GROUP_NAME);
+ 	if (value) {
+ 		if (priv->is_libreswan) {
+@@ -707,6 +711,8 @@
  		} else {
  			write_config_option (ipsec_fd, "  rightid=%s\n", value);
  		}
@@ -18,16 +26,7 @@
  	}
  
  	if (priv->is_libreswan) {
-@@ -858,7 +860,7 @@
- 		write_config_option (pppopt_fd, "mtu 1400\n");
- 	}
- 
--	/*	
-+	/*
- 	if (priv && priv->use_cert) {
- 		write_config_option (pppopt_fd, "cert \"%s\"\n", nm_setting_vpn_get_data_item (s_vpn, NM_L2TP_KEY_CERT_PUB));
- 		write_config_option (pppopt_fd, "ca \"%s\"\n", nm_setting_vpn_get_data_item (s_vpn, NM_L2TP_KEY_CERT_CA));
-@@ -991,30 +993,6 @@
+@@ -991,30 +997,6 @@
  		return nm_l2tp_ipsec_error(error, "Could not write /etc/ipsec.secrets file.");
  	}
  

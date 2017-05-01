@@ -1,17 +1,10 @@
-network-manager-l2tp (1.2.4-0ubuntu1~zesty1) zesty; urgency=medium
+network-manager-l2tp (1.2.4-0ubuntu2~xenial1) xenial; urgency=medium
 
-  * Bump debhelper compat level to 10.
+  * Patch to not use "leftprotoport=udp/l2tp" in generated ipsec config file
+    if port 1701 is not free. Ensures L2TP packets are encapsulated with IPsec
+    if IPsec is enabled.
 
- -- Douglas Kosovic <doug@uq.edu.au>  Mon, 13 Mar 2017 22:20:00 +1000
-
-network-manager-l2tp (1.2.4-0ubuntu1~yakkety1) yakkety; urgency=medium
-
-  * Set Depends on strongswan (>= 5.3.5-1ubuntu4.1) to network-manager-l2tp.
-    This ensures we have a version that has the apparmor profile disconnected
-    paths fix for charon and stroke (#1587886)
-  * Bump Standards-Version to 3.9.8.
-
- -- Douglas Kosovic <doug@uq.edu.au>  Mon, 13 Mar 2017 22:10:00 +1000
+ -- Douglas Kosovic <doug@uq.edu.au>  Mon, 1 May 2017 16:30:00 +1000
 
 network-manager-l2tp (1.2.4-0ubuntu1~xenial1) xenial; urgency=medium
 
